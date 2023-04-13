@@ -9,7 +9,7 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      ToDos: {
+      todos: {
         Row: {
           created_at: string | null
           id: number

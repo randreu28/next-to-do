@@ -12,7 +12,7 @@ export default async function App() {
     cookies,
   });
 
-  const { data } = await supabase.from("ToDos").select();
+  const { data } = await supabase.from("todos").select();
 
   return (
     <div>
