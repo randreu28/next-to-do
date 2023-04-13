@@ -11,22 +11,22 @@ export interface Database {
     Tables: {
       todos: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          isCompleted: boolean | null
-          title: string | null
+          isCompleted: boolean
+          title: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          isCompleted?: boolean | null
-          title?: string | null
+          isCompleted?: boolean
+          title: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           id?: number
-          isCompleted?: boolean | null
-          title?: string | null
+          isCompleted?: boolean
+          title?: string
         }
       }
     }
