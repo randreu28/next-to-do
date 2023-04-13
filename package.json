@@ -10,6 +10,7 @@
     "update-db-types": "npx supabase gen types typescript --project-id \"$PROJECT_ID\" > src/lib/db.types.ts"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.6.0",
     "@supabase/supabase-js": "^2.20.0",
     "@types/node": "18.15.11",
     "@types/react": "18.0.35",
