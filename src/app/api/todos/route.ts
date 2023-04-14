@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     cookies,
   });
 
-  const todoSchema = z.object({
+  const schema = z.object({
     isCompleted: z.boolean().optional(),
     title: z.string(),
   });
@@ -31,10 +31,47 @@ export async function POST(req: Request) {
   const data = await req.json();
 
   try {
-    todoSchema.parse(data);
-    const newTodo = data as z.infer<typeof todoSchema>;
+    schema.parse(data);
+    const newTodo = data as z.infer<typeof schema>;
 
     const { error } = await supabase.from("todos").insert({ ...newTodo });
+
+    if (error) {
+      return new Response(JSON.stringify({ error: "Database error" }), {
+        status: 400,
+      });
+    }
+  } catch {
+    return new Response(JSON.stringify({ error: "Invalid schema" }), {
+      status: 400,
+    });
+  }
+
+  return new Response(JSON.stringify({ message: "OK" }));
+}
+
+export async function PUT(req: Request) {
+  const supabase = createRouteHandlerSupabaseClient<Database>({
+    headers,
+    cookies,
+  });
+
+  const schema = z.object({
+    id: z.number(),
+    isCompleted: z.boolean().optional(),
+    title: z.string().optional(),
+  });
+
+  const data = await req.json();
+
+  try {
+    schema.parse(data);
+    const newTodo = data as z.infer<typeof schema>;
+
+    const { error } = await supabase
+      .from("todos")
+      .update({ ...newTodo })
+      .eq("id", newTodo.id);
 
     if (error) {
       return new Response(JSON.stringify({ error: "Database error" }), {
