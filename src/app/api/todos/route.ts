@@ -12,17 +12,22 @@ export async function GET() {
     cookies,
   });
 
-  const { data } = await supabase.from("todos").select("*");
+  const { data, error, status, statusText } = await supabase
+    .from("todos")
+    .select("*");
+
+  if (error) {
+    return new Response(JSON.stringify(error), {
+      status: status,
+      statusText: statusText,
+    });
+  }
 
   return new Response(JSON.stringify(data));
 }
 
 export async function POST(req: Request) {
-  const supabase = createRouteHandlerSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
-
+  /* Validation */
   const schema = z.object({
     isCompleted: z.boolean().optional(),
     title: z.string(),
@@ -30,20 +35,29 @@ export async function POST(req: Request) {
 
   const data = await req.json();
 
-  try {
-    schema.parse(data);
-    const newTodo = data as z.infer<typeof schema>;
+  const { success } = schema.safeParse(data);
 
-    const { error } = await supabase.from("todos").insert({ ...newTodo });
-
-    if (error) {
-      return new Response(JSON.stringify({ error: "Database error" }), {
-        status: 400,
-      });
-    }
-  } catch {
+  if (!success) {
     return new Response(JSON.stringify({ error: "Invalid schema" }), {
       status: 400,
+    });
+  }
+  /* Data insertion */
+  const newTodo = data as z.infer<typeof schema>;
+
+  const supabase = createRouteHandlerSupabaseClient<Database>({
+    headers,
+    cookies,
+  });
+
+  const { error, status, statusText } = await supabase
+    .from("todos")
+    .insert({ ...newTodo });
+
+  if (error) {
+    return new Response(JSON.stringify(error), {
+      status: status,
+      statusText: statusText,
     });
   }
 
@@ -51,11 +65,7 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  const supabase = createRouteHandlerSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
-
+  /* Validation */
   const schema = z.object({
     id: z.number(),
     isCompleted: z.boolean().optional(),
@@ -64,23 +74,30 @@ export async function PUT(req: Request) {
 
   const data = await req.json();
 
-  try {
-    schema.parse(data);
-    const newTodo = data as z.infer<typeof schema>;
+  const { success } = schema.safeParse(data);
 
-    const { error } = await supabase
-      .from("todos")
-      .update({ ...newTodo })
-      .eq("id", newTodo.id);
-
-    if (error) {
-      return new Response(JSON.stringify({ error: "Database error" }), {
-        status: 400,
-      });
-    }
-  } catch {
+  if (!success) {
     return new Response(JSON.stringify({ error: "Invalid schema" }), {
       status: 400,
+    });
+  }
+  /* Data update */
+  const newTodo = data as z.infer<typeof schema>;
+
+  const supabase = createRouteHandlerSupabaseClient<Database>({
+    headers,
+    cookies,
+  });
+
+  const { error, status, statusText } = await supabase
+    .from("todos")
+    .update({ ...newTodo })
+    .eq("id", newTodo.id);
+
+  if (error) {
+    return new Response(JSON.stringify(error), {
+      status: status,
+      statusText: statusText,
     });
   }
 
@@ -88,34 +105,36 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const supabase = createRouteHandlerSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
-
+  /* Validation */
   const schema = z.object({
     id: z.number(),
   });
 
   const data = await req.json();
 
-  try {
-    schema.parse(data);
-    const newTodo = data as z.infer<typeof schema>;
-
-    const { error } = await supabase
-      .from("todos")
-      .delete()
-      .eq("id", newTodo.id);
-
-    if (error) {
-      return new Response(JSON.stringify({ error: "Database error" }), {
-        status: 400,
-      });
-    }
-  } catch {
+  const { success } = schema.safeParse(data);
+  if (!success) {
     return new Response(JSON.stringify({ error: "Invalid schema" }), {
       status: 400,
+    });
+  }
+  /* Data deletion */
+  const newTodo = data as z.infer<typeof schema>;
+
+  const supabase = createRouteHandlerSupabaseClient<Database>({
+    headers,
+    cookies,
+  });
+
+  const { error, status, statusText } = await supabase
+    .from("todos")
+    .delete()
+    .eq("id", newTodo.id);
+
+  if (error) {
+    return new Response(JSON.stringify(error), {
+      status: status,
+      statusText: statusText,
     });
   }
 
