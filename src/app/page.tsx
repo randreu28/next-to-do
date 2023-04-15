@@ -15,7 +15,7 @@ export default async function App() {
   } = await supabase.auth.getSession();
 
   if (!session) {
-    redirect("/auth");
+    redirect("/sign-in");
   }
 
   return <div>Hello, {session.user.aud}</div>;
