@@ -2,9 +2,7 @@ import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-next
 import { headers, cookies } from "next/headers";
 
 import type { Database } from "@/lib/db.types";
-
-// do not cache this page
-export const revalidate = 0;
+import { redirect } from "next/navigation";
 
 export default async function App() {
   const supabase = createServerComponentSupabaseClient<Database>({
@@ -12,11 +10,13 @@ export default async function App() {
     cookies,
   });
 
-  const { data } = await supabase.from("todos").select();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  return (
-    <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </div>
-  );
+  if (!session) {
+    redirect("/auth");
+  }
+
+  return <div>Hello, {session.user.aud}</div>;
 }
