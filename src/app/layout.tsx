@@ -1,5 +1,5 @@
 import "./globals.css";
-import SupabaseProvider from "@/app/supabase-provider";
+import SupabaseProvider from "@/components/SupabaseProvider";
 
 export const metadata = {
   title: "Next Todo App",
