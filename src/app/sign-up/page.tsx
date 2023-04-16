@@ -26,8 +26,10 @@ export default function SignUp() {
     const { error } = await supabase.auth.signUp(formValues);
 
     if (error) {
+      setConfirmation(null);
       setError(error.message);
     } else {
+      setError(null);
       setConfirmation("Please, check your email to complete sign-up!");
     }
   }
