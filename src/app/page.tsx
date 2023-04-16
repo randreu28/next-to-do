@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import NavBar from "@/component/NavBar";
 
+export const revalidate = 0;
+
 export default async function App() {
   const supabase = createServerComponentSupabaseClient<Database>({
     headers,
