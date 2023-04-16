@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="p-5">
         <SupabaseProvider>{children}</SupabaseProvider>
       </body>
     </html>
