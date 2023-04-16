@@ -4,6 +4,7 @@ import { headers, cookies } from "next/headers";
 import type { Database } from "@/lib/db.types";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import NavBar from "@/component/NavBar";
 
 export default async function App() {
   const supabase = createServerComponentSupabaseClient<Database>({
@@ -26,8 +27,8 @@ export default async function App() {
   }
 
   return (
-    <div className="space-y-5">
-      <p className="float-right">Signed in as {session.user.email}</p>
+    <div className="space-y-5 p-5">
+      <NavBar email={session.user.email} />
 
       <h1 className="text-3xl">To do&apos;s: </h1>
       {todos.map((todo, key) => {
