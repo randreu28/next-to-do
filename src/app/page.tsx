@@ -22,6 +22,7 @@ export default async function App() {
     redirect("/sign-in");
   }
 
+  /* No need to fliter per user id as RLS policies already do */
   const { data: todos, error } = await supabase.from("todos").select();
 
   if (error) {
