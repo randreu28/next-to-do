@@ -2,20 +2,46 @@
 
 import { useSupabase } from "@/components/SupabaseProvider";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-export default function Auth() {
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+export default function SignIn() {
   const { supabase } = useSupabase();
+  const { register, handleSubmit } = useForm<FormValues>();
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
-  function googleSignIn() {
-    /* .... */
+  supabase.auth.onAuthStateChange((_, session) => {
+    if (session) router.push("/");
+  });
+
+  async function emailSignIn(formValues: FormValues) {
+    const { error } = await supabase.auth.signInWithPassword(formValues);
+
+    if (error) {
+      setError(error.message);
+    }
   }
 
-  function githubSignIn() {
-    /* .... */
+  async function googleSignIn() {
+    await supabase.auth.signInWithOAuth({ provider: "google" });
+  }
+
+  async function githubSignIn() {
+    await supabase.auth.signInWithOAuth({ provider: "github" });
   }
 
   return (
-    <>
+    <form
+      onSubmit={handleSubmit(emailSignIn)}
+      className="bg-gray-900 p-5 rounded w-full max-w-xl space-y-5"
+    >
       <span className="flex gap-5">
         <span className="p-2 bg-gray-800 rounded-xl my-auto">
           <svg
@@ -39,12 +65,14 @@ export default function Auth() {
 
       <div className="w-full flex gap-5">
         <button
+          type="button"
           onClick={googleSignIn}
           className="bg-gray-600 p-3 rounded w-full text-center"
         >
           Google
         </button>
         <button
+          type="button"
           onClick={githubSignIn}
           className="bg-gray-600 p-3 rounded w-full text-center"
         >
@@ -54,13 +82,22 @@ export default function Auth() {
 
       <div className="flex flex-col gap-2">
         <label className="my-auto text-gray-400 font-bold">Email Address</label>
-        <input type="email" className="p-2" />
+        <input {...register("email")} type="email" required className="p-2" />
       </div>
 
       <div className="flex flex-col gap-2">
         <label className="my-auto text-gray-400 font-bold">Password</label>
-        <input type="password" className="p-2" />
+        <input
+          {...register("password")}
+          type="password"
+          required
+          className="p-2"
+        />
       </div>
+
+      {error && (
+        <p className="bg-red-500/25 p-1 rounded text-red-500">{error}</p>
+      )}
 
       <button type="submit" className="w-full bg-gray-600 p-3 rounded">
         Sign in
@@ -70,6 +107,6 @@ export default function Auth() {
         <Link href={"/recover-password"}>Forgot your password?</Link>
         <Link href={"/sign-up"}>Don&apos;t have an account? Sign up</Link>
       </div>
-    </>
+    </form>
   );
 }
