@@ -2,7 +2,6 @@
 
 import { useSupabase } from "@/components/SupabaseProvider";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -17,12 +16,6 @@ export default function SignUp() {
   const { register, handleSubmit } = useForm<FormValues>();
   const [error, setError] = useState<string | null>(null);
   const [confirmation, setConfirmation] = useState<string | null>(null);
-
-  const router = useRouter();
-
-  supabase.auth.onAuthStateChange((_, session) => {
-    if (session) router.push("/");
-  });
 
   async function emailSignIn(formValues: FormValues) {
     if (formValues.password !== formValues.password2) {
