@@ -1,6 +1,7 @@
 "use client";
 
 import { useSupabase } from "@/components/SupabaseProvider";
+import { getURL } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -30,11 +31,17 @@ export default function SignIn() {
   }
 
   async function googleSignIn() {
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: getURL() },
+    });
   }
 
   async function githubSignIn() {
-    await supabase.auth.signInWithOAuth({ provider: "github" });
+    await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: { redirectTo: getURL() },
+    });
   }
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 
 import { useSupabase } from "@/components/SupabaseProvider";
+import { getURL } from "next/dist/shared/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -35,11 +36,17 @@ export default function SignUp() {
   }
 
   async function googleSignUp() {
-    await supabase.auth.signInWithOAuth({ provider: "google" });
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: getURL() },
+    });
   }
 
   async function githubSignUp() {
-    await supabase.auth.signInWithOAuth({ provider: "github" });
+    await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: { redirectTo: getURL() },
+    });
   }
 
   return (
