@@ -5,6 +5,7 @@ import type { Database } from "@/lib/db.types";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
+import TodoCreator from "@/components/TodoCreator";
 
 export const revalidate = 0;
 
@@ -32,6 +33,7 @@ export default async function App() {
   return (
     <div className="space-y-5 p-5">
       <h1 className="text-3xl">To do&apos;s: </h1>
+      <TodoCreator />
       {todos.map((todo, key) => {
         return (
           <li className={todo.is_completed ? "line-through" : ""} key={key}>
