@@ -3,6 +3,7 @@ import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-next
 import { cookies, headers } from "next/headers";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import Todo from "@/components/Todo";
 
 type Props = {
   params: {
@@ -10,7 +11,9 @@ type Props = {
   };
 };
 
-export default async function Todo({ params: { id: _id } }: Props) {
+export const revalidate = 0;
+
+export default async function TodoPage({ params: { id: _id } }: Props) {
   const id = parseInt(_id);
 
   if (isNaN(id)) {
@@ -42,7 +45,8 @@ export default async function Todo({ params: { id: _id } }: Props) {
 
   return (
     <>
-      <p>{todo.title}</p>
+      <Todo {...todo} />
+      <br />
       <Link href="/" className="underline">
         Go back
       </Link>
