@@ -3,9 +3,9 @@ import { headers, cookies } from "next/headers";
 
 import type { Database } from "@/lib/db.types";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import NavBar from "@/components/NavBar";
+
 import TodoCreator from "@/components/TodoCreator";
+import Todos from "@/components/Todos";
 
 export const revalidate = 0;
 
@@ -23,26 +23,11 @@ export default async function App() {
     redirect("/sign-in");
   }
 
-  /* No need to fliter per user id as RLS policies already do */
-  const { data: todos, error } = await supabase.from("todos").select();
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
   return (
     <div className="space-y-5 p-5">
       <h1 className="text-3xl">To do&apos;s: </h1>
       <TodoCreator />
-      {todos.map((todo, key) => {
-        return (
-          <li className={todo.is_completed ? "line-through" : ""} key={key}>
-            <Link href={"/" + todo.id} className="hover:underline">
-              {todo.title}
-            </Link>
-          </li>
-        );
-      })}
+      <Todos />
     </div>
   );
 }
