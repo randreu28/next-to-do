@@ -13,7 +13,7 @@ export default function NavBar({ email }: Props) {
     supabase.auth.signOut();
   }
   return (
-    <div className="float-right">
+    <div className="float-right p-5">
       <p>Signed in as {email}</p>
       <button className="underline float-right" onClick={signOut}>
         Sign out

@@ -4,7 +4,7 @@ import { headers, cookies } from "next/headers";
 import type { Database } from "@/lib/db.types";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import NavBar from "@/component/NavBar";
+import NavBar from "@/components/NavBar";
 
 export const revalidate = 0;
 
@@ -31,8 +31,6 @@ export default async function App() {
 
   return (
     <div className="space-y-5 p-5">
-      <NavBar email={session.user.email} />
-
       <h1 className="text-3xl">To do&apos;s: </h1>
       {todos.map((todo, key) => {
         return (
