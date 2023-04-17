@@ -37,7 +37,7 @@ export default function Todos() {
       .channel("todos")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "todos" },
+        { event: "INSERT", schema: "public", table: "todos" },
         (payload) => {
           const newTodos = structuredClone(todos);
           if (newTodos === undefined) return;
